@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>个人主页</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* ---------- 导航 ---------- */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 14px 24px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+    .nav a {
+      color: #333;
+      text-decoration: none;
+      padding: 4px 0;
+    }
+    .nav a:hover { color: #0066cc; }
+
+    /* ---------- 通用卡片 ---------- */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+    }
+
+    /* 让锚点跳转时不被固定导航挡住 */
+    section {
+      padding: 24px 16px;
+      scroll-margin-top: 70px;
+    }
+
+    h1 {
+      color: #1e88e5;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    p {
+       color: #1e88e5;
+      text-align: center;
+      margin-bottom: 10px;
+      
+    }
+    img {
+      display: block;
+      width:fit-content;
+      
+      height: auto;
+      border-radius: 10px;
+      margin: 20px auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+    }
+
+    /* ---------- 按钮样式：只作用于这两个区块里的链接 ---------- */
+    #home a,
+    #web a {
+      display:block;
+      width:max-content;
+      padding: 10px 20px;
+      margin: 4px 8px 4px 0;
+      background: #1e88e5;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background .3s;
+    }
+    #home a:hover,
+    #web a:hover { background: #1565c0; }
+
+    /* ---------- 爱好区：两栏 ---------- */
+    #myhobby .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
+    }
+    #myhobby .box {
+      flex: 1 1 280px;
+      padding: 20px;
+      background: #f0f0f0;
+      background-image:url("sisubackground.jpg");
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      border-radius: 12px;
+      
+    }
+    #myhobby .box h1 { margin-top: 0; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="#home">home</a>
+    <a href="#web">useful website</a>
+    <a href="#myhobby">more about my hobby</a>
+  </nav>
+
+  <section id="home">
+    <div class="container">
+      <h1>Self Introduction</h1>
+      <p>My hobby is playing basketball and chess. I am learning web designing.</p>
+      <img src="sisu.jpg" alt="SISU" width="300">
+      <a href="https://www.bilibili.com/list/ml1760082255?oid=546403908&bvid=BV1hq4y1s7VH">点击可V你50</a>
+    </div>
+  </section>
+
+  <section id="web">
+    <div class="container">
+      <h1>Here is some useful website</h1>
+      <a href="https://www.runoob.com/" target="_blank" rel="noopener">runoob,a website that can help you learn web designing</a>
+      <a href="https://jw.shisu.edu.cn/login" target="_blank" rel="noopener">sisujw,a website that can help you choose you class</a>
+    </div>
+  </section>
+
+  <section id="myhobby">
+    <div class="container">
+      <div class="box">
+        <h1>Basketball</h1>
+        <p>I like playing basketball because I think it can make me stronger.</p>
+        <img src="curry.jpg" alt="my idol" width="300">
+      </div>
+      <div class="box">
+        <h1>Chess</h1>
+        <p>I like playing chess because I think it will sharpen my mind.</p>
+        <img src="chess.jpg" alt="chess" width="300">      
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
