@@ -741,6 +741,290 @@
     .xm-foot a { color: #7dd3fc; text-decoration: none; }
     .xm-foot a:hover { text-decoration: underline; }
 
+    /* ==================================================
+       电子博饼
+    ================================================== */
+    .bb-trigger {
+      font: inherit;
+      color: #7dd3fc;
+      background: none;
+      border: 0;
+      border-bottom: 1px dashed rgba(125, 211, 252, .7);
+      padding: 0 2px 1px;
+      cursor: pointer;
+      text-shadow: 0 0 16px rgba(34, 211, 238, .55);
+      animation: bbPulse 2.6s ease-out infinite;
+    }
+    .bb-trigger:hover { color: #e0f9ff; border-bottom-color: #22d3ee; }
+    .bb-trigger:focus-visible { outline: 2px solid rgba(34, 211, 238, .7); outline-offset: 3px; border-radius: 4px; }
+    @keyframes bbPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, .30); }
+      50% { box-shadow: 0 0 0 7px rgba(34, 211, 238, 0); }
+    }
+
+    .bb-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .bb-modal[hidden] { display: none; }
+
+    .bb-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(3, 6, 14, .78);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      animation: bbFade .3s ease;
+    }
+    @keyframes bbFade { from { opacity: 0; } to { opacity: 1; } }
+
+    .bb-panel {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 26px 26px 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(34, 211, 238, .28);
+      background:
+        radial-gradient(120% 90% at 50% 0%, rgba(34, 211, 238, .10), transparent 60%),
+        linear-gradient(165deg, rgba(18, 24, 44, .97), rgba(8, 12, 24, .99));
+      box-shadow: 0 40px 90px rgba(0, 0, 0, .75), 0 0 70px rgba(34, 211, 238, .14);
+      animation: bbPop .35s cubic-bezier(.2, .8, .3, 1);
+      text-align: center;
+    }
+    @keyframes bbPop {
+      from { opacity: 0; transform: translateY(18px) scale(.96); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .bb-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, .05);
+      color: #c3d0e6;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .bb-close:hover { background: rgba(244, 114, 182, .16); border-color: rgba(244, 114, 182, .5); color: #fff; }
+
+    .bb-eyebrow {
+      margin: 0 0 4px;
+      font-size: 10.5px;
+      letter-spacing: 4px;
+      font-weight: 700;
+      color: var(--cyan);
+      opacity: .9;
+    }
+    .bb-title {
+      margin: 0 0 4px;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 24px rgba(139, 92, 246, .45));
+    }
+    .bb-sub {
+      margin: 0 0 16px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    /* 骰碗 */
+    .bowl {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto 18px;
+      padding: 34px 26px 40px;
+      border-radius: 14px 14px 50% 50% / 14px 14px 92% 92%;
+      background:
+        radial-gradient(110% 80% at 50% 0%, rgba(34, 211, 238, .10), transparent 55%),
+        radial-gradient(120% 110% at 50% 115%, #0b1424, #060a15 70%);
+      border: 1px solid rgba(34, 211, 238, .22);
+      box-shadow:
+        inset 0 -34px 60px rgba(0, 0, 0, .85),
+        inset 0 14px 34px rgba(34, 211, 238, .10),
+        0 26px 56px rgba(0, 0, 0, .6),
+        0 0 56px rgba(34, 211, 238, .12);
+    }
+    .bowl::before {
+      content: "";
+      position: absolute;
+      left: 8%; right: 8%; top: -1px;
+      height: 14px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, rgba(34, 211, 238, .05), rgba(165, 243, 252, .55), rgba(139, 92, 246, .35), rgba(34, 211, 238, .05));
+      filter: blur(1px);
+      opacity: .8;
+    }
+    .bowl::after {
+      content: "";
+      position: absolute;
+      left: 50%; bottom: 14px;
+      transform: translateX(-50%);
+      width: 46%; height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(244, 114, 182, .35), transparent 75%);
+      filter: blur(6px);
+      pointer-events: none;
+    }
+
+    .bb-dice {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      justify-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .die {
+      width: 62px;
+      height: 62px;
+      padding: 9px;
+      border-radius: 13px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2px;
+      background: linear-gradient(155deg, #ffffff 0%, #e6eefb 55%, #cfdcee 100%);
+      box-shadow:
+        0 8px 18px rgba(0, 0, 0, .55),
+        inset 0 1px 0 rgba(255, 255, 255, .95),
+        inset 0 -2px 6px rgba(80, 110, 160, .25);
+      will-change: transform;
+    }
+    .die .pip {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #1b2a45;
+      opacity: 0;
+      transform: scale(.4);
+      transition: opacity .08s linear, transform .12s ease;
+    }
+    .die .pip.on { opacity: 1; transform: scale(1); }
+    .die.red .pip.on { background: #e11d48; box-shadow: 0 0 6px rgba(225, 29, 72, .5); }
+
+    .bb-dice.rolling .die { animation: bbShake .4s ease-in-out infinite; }
+    .bb-dice.rolling .die:nth-child(2) { animation-delay: .05s; }
+    .bb-dice.rolling .die:nth-child(3) { animation-delay: .1s; }
+    .bb-dice.rolling .die:nth-child(4) { animation-delay: .15s; }
+    .bb-dice.rolling .die:nth-child(5) { animation-delay: .2s; }
+    .bb-dice.rolling .die:nth-child(6) { animation-delay: .25s; }
+    @keyframes bbShake {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      25%  { transform: translate(-4px, -10px) rotate(-14deg); }
+      50%  { transform: translate(5px, -2px) rotate(16deg); }
+      75%  { transform: translate(-3px, -7px) rotate(-8deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    /* 结果 */
+    .bb-result { min-height: 78px; display: flex; align-items: center; justify-content: center; }
+    .bb-hint { font-size: 13px; color: #7f8fab; }
+    .bb-prize { animation: bbPrize .45s cubic-bezier(.2, .9, .3, 1); }
+    @keyframes bbPrize {
+      from { opacity: 0; transform: scale(.85); }
+      to { opacity: 1; transform: none; }
+    }
+    .bb-prize b {
+      display: block;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      line-height: 1.3;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 26px rgba(139, 92, 246, .5));
+    }
+    .bb-prize.t-gold b { background: linear-gradient(100deg, #fde68a, #fbbf24 50%, #f59e0b); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 26px rgba(251, 191, 36, .55)); }
+    .bb-prize.t-purple b { background: linear-gradient(100deg, #c4b5fd, #a78bfa 55%, #8b5cf6); -webkit-background-clip: text; background-clip: text; }
+    .bb-prize.t-pink b { background: linear-gradient(100deg, #fbcfe8, #f472b6 55%, #ec4899); -webkit-background-clip: text; background-clip: text; }
+    .bb-prize.t-cyan b { background: linear-gradient(100deg, #a5f3fc, #22d3ee 55%, #06b6d4); -webkit-background-clip: text; background-clip: text; }
+    .bb-prize.t-slate b { background: linear-gradient(100deg, #cbd5e1, #94a3b8 60%, #64748b); -webkit-background-clip: text; background-clip: text; }
+    .bb-prize.t-none b { background: linear-gradient(100deg, #94a3b8, #64748b); -webkit-background-clip: text; background-clip: text; font-size: 24px; }
+
+    .bb-prize span {
+      display: block;
+      font-size: 13px;
+      color: #a9b8d4;
+      margin-top: 4px;
+    }
+    .bb-prize i {
+      display: inline-block;
+      font-style: normal;
+      font-size: 11.5px;
+      color: #7dd3fc;
+      border: 1px solid rgba(34, 211, 238, .3);
+      border-radius: 999px;
+      padding: 2px 10px;
+      margin-top: 8px;
+    }
+
+    .bb-roll {
+      margin-top: 14px;
+      width: 100%;
+      max-width: 300px;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #04121e;
+      border: 0;
+      border-radius: 12px;
+      background: var(--grad-btn);
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(34, 211, 238, .35);
+      transition: transform .2s, box-shadow .2s, filter .2s;
+    }
+    .bb-roll:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 14px 40px rgba(139, 92, 246, .5);
+    }
+    .bb-roll:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
+    .bb-roll:focus-visible { outline: 2px solid rgba(34, 211, 238, .8); outline-offset: 3px; }
+
+    .bb-tally {
+      margin-top: 14px;
+      font-size: 11.5px;
+      color: #6f80a3;
+      line-height: 1.9;
+      letter-spacing: .3px;
+    }
+    .bb-tally b { color: #a5f3fc; font-weight: 700; }
+
+    @media (max-width: 480px) {
+      .bb-panel { padding: 22px 16px 20px; border-radius: 20px; }
+      .bb-title { font-size: 22px; }
+      .bowl { padding: 26px 18px 32px; }
+      .die { width: 52px; height: 52px; padding: 7px; border-radius: 11px; }
+      .bb-prize b { font-size: 25px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bb-trigger { animation: none; }
+      .bb-dice.rolling .die { animation: none; }
+      .bb-panel, .bb-prize { animation: none; }
+    }
+
     /* 滚动入场动画 */
     .reveal {
       opacity: 0;
@@ -968,7 +1252,7 @@
       <div class="xm-h2"><h3>闽南底色</h3><span>Culture</span></div>
       <div class="xm-culture reveal">
         <p>厦门是闽南文化的核心城市：<em>南音</em>被称作“中国音乐活化石”，与海洋民俗<em>“送王船”</em>同列人类非物质文化遗产代表作名录；歌仔戏、高甲戏、答嘴鼓至今活跃在街头巷尾。</p>
-        <p>每逢中秋，家家户户围坐掷骰<em>“博饼”</em>——相传由郑成功所创的习俗，让厦门人过着“小春节、大中秋”的独特节日；一泡功夫茶下肚，才是厦门最地道的打开方式。</p>
+        <p>每逢中秋，家家户户围坐掷骰<em>“<button class="bb-trigger" id="bbOpen" aria-haspopup="dialog" aria-controls="bbModal">博饼</button>”</em>——相传由郑成功所创的习俗，让厦门人过着“小春节、大中秋”的独特节日。<br>点一下「博饼」，就能自己掷一把六粒骰子。</p>
       </div>
 
       <p class="xm-foot">
@@ -1044,6 +1328,227 @@
         });
       }, { threshold: 0.12 });
       document.querySelectorAll('.reveal').forEach(function (el) { reveal.observe(el); });
+    })();
+  </script>
+
+  <!-- ============ 电子博饼弹窗 ============ -->
+  <div class="bb-modal" id="bbModal" role="dialog" aria-modal="true" aria-labelledby="bbTitle" aria-describedby="bbSub" hidden>
+    <div class="bb-backdrop" data-bb-close></div>
+    <div class="bb-panel">
+      <button class="bb-close" type="button" data-bb-close aria-label="关闭博饼">&times;</button>
+      <p class="bb-eyebrow">MID-AUTUMN FESTIVAL</p>
+      <h3 class="bb-title" id="bbTitle">博饼</h3>
+      <p class="bb-sub" id="bbSub">六粒骰子落进瓷碗，博个中秋彩头 · 一秀到状元，一副会饼共 63 块</p>
+      <div class="bowl">
+        <div class="bb-dice" id="bbDice"></div>
+      </div>
+      <div class="bb-result" id="bbResult" aria-live="polite">
+        <span class="bb-hint">点下方按钮，掷出你的运气</span>
+      </div>
+      <button class="bb-roll" id="bbRoll" type="button">投掷骰子</button>
+      <div class="bb-tally" id="bbTally"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var modal = document.getElementById('bbModal');
+      if (!modal) return;
+
+      var openBtn = document.getElementById('bbOpen');
+      var diceBox = document.getElementById('bbDice');
+      var resultBox = document.getElementById('bbResult');
+      var rollBtn = document.getElementById('bbRoll');
+      var tallyBox = document.getElementById('bbTally');
+      var closeEls = modal.querySelectorAll('[data-bb-close]');
+
+      /* 骰面点位：3×3 宫格中的索引 */
+      var PIP = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+      /* 各奖项对应会饼块数 */
+      var CAKES = { '状元': 1, '对堂': 2, '三红': 4, '四进': 8, '二举': 16, '一秀': 32 };
+      var TALLY_ORDER = ['状元', '对堂', '三红', '四进', '二举', '一秀', '无奖'];
+
+      var dice = [];
+      var rolling = false;
+      var total = 0;
+      var tally = {};
+      var lastFocus = null;
+      TALLY_ORDER.forEach(function (k) { tally[k] = 0; });
+
+      /* ---------- 构建 6 粒骰子 ---------- */
+      for (var i = 0; i < 6; i++) {
+        var el = document.createElement('div');
+        el.className = 'die';
+        el.setAttribute('role', 'img');
+        for (var j = 0; j < 9; j++) {
+          var pip = document.createElement('span');
+          pip.className = 'pip';
+          el.appendChild(pip);
+        }
+        diceBox.appendChild(el);
+        dice.push({ el: el, pips: el.querySelectorAll('.pip') });
+      }
+
+      function setFace(item, v) {
+        var on = PIP[v];
+        for (var k = 0; k < 9; k++) {
+          item.pips[k].classList.toggle('on', on.indexOf(k) > -1);
+        }
+        /* 一点与四点为红点，与真骰子一致 */
+        item.el.classList.toggle('red', v === 1 || v === 4);
+        item.el.setAttribute('aria-label', v + ' 点');
+      }
+
+      dice.forEach(function (it) {
+        setFace(it, 1 + Math.floor(Math.random() * 6));
+      });
+
+      /* ---------- 判奖规则 ----------
+         状元级（由大到小）：六杯红 > 遍地锦 > 黑六勃 > 状元插金花 > 五红 > 五子登科 > 状元(四个四点)
+         以下依次：对堂(一至六各一) > 三红(三个四点) > 四进(四个同点非四)
+                  > 二举(两个四点) > 一秀(一个四点)
+      ---------------------------------- */
+      function judge(v) {
+        var c = [0, 0, 0, 0, 0, 0, 0];
+        for (var n = 0; n < v.length; n++) c[v[n]]++;
+        var f = c[4];      // 四点个数
+        var o = c[1];      // 一点个数
+        var x, i, cand, straight;
+
+        if (f === 6) return { name: '六杯红', desc: '六粒骰子全是四点 · 状元', cat: '状元', tier: 't-gold' };
+        if (o === 6) return { name: '遍地锦', desc: '六粒骰子全是一点 · 状元', cat: '状元', tier: 't-gold' };
+
+        cand = [2, 3, 5, 6];
+        for (i = 0; i < cand.length; i++) {
+          if (c[cand[i]] === 6) {
+            return { name: '黑六勃', desc: '六粒骰子同为 ' + cand[i] + ' 点 · 状元', cat: '状元', tier: 't-gold' };
+          }
+        }
+        if (f === 4 && o === 2) return { name: '状元插金花', desc: '四个四点 + 两个一点 · 状元', cat: '状元', tier: 't-gold' };
+        if (f === 5) return { name: '五红', desc: '五个四点 · 状元', cat: '状元', tier: 't-gold' };
+
+        cand = [1, 2, 3, 5, 6];
+        for (i = 0; i < cand.length; i++) {
+          if (c[cand[i]] === 5) {
+            return { name: '五子登科', desc: '五个 ' + cand[i] + ' 点 · 状元', cat: '状元', tier: 't-gold' };
+          }
+        }
+        if (f === 4) return { name: '状元', desc: '四个四点', cat: '状元', tier: 't-gold' };
+
+        straight = true;
+        for (x = 1; x <= 6; x++) if (c[x] !== 1) straight = false;
+        if (straight) return { name: '对堂', desc: '一至六点各一粒（顺子）', cat: '对堂', tier: 't-purple' };
+
+        if (f === 3) return { name: '三红', desc: '三个四点', cat: '三红', tier: 't-pink' };
+
+        cand = [1, 2, 3, 5, 6];
+        for (i = 0; i < cand.length; i++) {
+          if (c[cand[i]] === 4) {
+            return { name: '四进', desc: '四个 ' + cand[i] + ' 点', cat: '四进', tier: 't-cyan' };
+          }
+        }
+        if (f === 2) return { name: '二举', desc: '两个四点', cat: '二举', tier: 't-cyan' };
+        if (f === 1) return { name: '一秀', desc: '一个四点', cat: '一秀', tier: 't-slate' };
+
+        return { name: '未中', desc: '这一把没有四点，再博一次', cat: '无奖', tier: 't-none' };
+      }
+
+      function showResult(r) {
+        var cakes = CAKES[r.cat];
+        var tag = r.cat === '无奖' ? '没有会饼' : ('会饼 ' + cakes + ' 块');
+        resultBox.innerHTML =
+          '<div class="bb-prize ' + r.tier + '">' +
+            '<b>' + r.name + '</b>' +
+            '<span>' + r.desc + '</span>' +
+            '<i>' + tag + '</i>' +
+          '</div>';
+      }
+
+      function updateTally() {
+        var parts = TALLY_ORDER.filter(function (k) { return k !== '无奖'; }).map(function (k) {
+          return k + ' <b>' + tally[k] + '</b>';
+        });
+        tallyBox.innerHTML = '已投掷 <b>' + total + '</b> 次 ｜ ' + parts.join(' · ') + ' ｜ 未中 <b>' + tally['无奖'] + '</b>';
+      }
+
+      function roll() {
+        if (rolling) return;
+        rolling = true;
+        rollBtn.disabled = true;
+        rollBtn.textContent = '骰子落碗中…';
+        diceBox.classList.add('rolling');
+        resultBox.innerHTML = '<span class="bb-hint">听，骰子在碗里转…</span>';
+
+        /* 滚动的过程：快速乱跳骰面 */
+        var spin = setInterval(function () {
+          dice.forEach(function (it) {
+            setFace(it, 1 + Math.floor(Math.random() * 6));
+          });
+        }, 70);
+
+        setTimeout(function () {
+          clearInterval(spin);
+          diceBox.classList.remove('rolling');
+
+          var vals = [];
+          for (var k = 0; k < 6; k++) vals.push(1 + Math.floor(Math.random() * 6));
+
+          /* 逐粒停顿落定，更有手感 */
+          vals.forEach(function (v, idx) {
+            setTimeout(function () { setFace(dice[idx], v); }, idx * 45);
+          });
+
+          var r = judge(vals);
+          setTimeout(function () {
+            showResult(r);
+            tally[r.cat] = (tally[r.cat] || 0) + 1;
+            total++;
+            updateTally();
+            rolling = false;
+            rollBtn.disabled = false;
+            rollBtn.textContent = '再博一次';
+          }, 6 * 45);
+        }, 1150);
+      }
+
+      /* ---------- 弹窗开合 ---------- */
+      function openModal() {
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        setTimeout(function () { rollBtn.focus(); }, 60);
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      openBtn.addEventListener('click', openModal);
+      Array.prototype.forEach.call(closeEls, function (el) {
+        el.addEventListener('click', closeModal);
+      });
+      rollBtn.addEventListener('click', roll);
+
+      document.addEventListener('keydown', function (e) {
+        if (modal.hidden) return;
+        if (e.key === 'Escape') { closeModal(); return; }
+        /* 焦点循环，键盘操作不跑到弹窗外面 */
+        if (e.key === 'Tab') {
+          var focusable = modal.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])');
+          if (!focusable.length) return;
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault(); last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault(); first.focus();
+          }
+        }
+      });
+
+      updateTally();
     })();
   </script>
 
