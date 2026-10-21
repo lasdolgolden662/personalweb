@@ -1,92 +1,291 @@
 
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>个人主页</title>
+  <meta name="theme-color" content="#05070f">
+  <title>个人主页 · 我的家乡厦门</title>
   <style>
+    :root {
+      --bg-0: #05070f;
+      --cyan: #22d3ee;
+      --cyan-soft: rgba(34, 211, 238, .14);
+      --violet: #8b5cf6;
+      --pink: #f472b6;
+      --text: #e8eefc;
+      --muted: #9aa8c7;
+      --glass: rgba(255, 255, 255, .045);
+      --glass-strong: rgba(255, 255, 255, .075);
+      --stroke: rgba(255, 255, 255, .10);
+      --stroke-neon: rgba(34, 211, 238, .30);
+      --grad: linear-gradient(100deg, #67e8f9 0%, #a78bfa 52%, #f9a8d4 100%);
+      --grad-btn: linear-gradient(135deg, #22d3ee, #8b5cf6);
+    }
+
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
-      background: #f5f7fa;
-      color: #333;
+      background: var(--bg-0);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ---------- 导航 ---------- */
-    .nav {
+    /* ============ 背景光晕 + 网格 ============ */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(58vw 58vw at 10% -8%, rgba(34, 211, 238, .22), transparent 62%),
+        radial-gradient(52vw 52vw at 92% 4%, rgba(139, 92, 246, .26), transparent 64%),
+        radial-gradient(72vw 72vw at 46% 112%, rgba(244, 114, 182, .16), transparent 62%),
+        linear-gradient(180deg, #05070f 0%, #080c1c 42%, #05070f 100%);
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .5;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(circle at 50% 26%, #000 0%, transparent 78%);
+      mask-image: radial-gradient(circle at 50% 26%, #000 0%, transparent 78%);
+    }
+
+    section { position: relative; z-index: 1; }
+
+    /* ============ 顶部阅读进度条 ============ */
+    #progressBar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, #22d3ee, #8b5cf6 55%, #f472b6);
+      box-shadow: 0 0 14px rgba(34, 211, 238, .75);
+      z-index: 300;
+      border-radius: 0 3px 3px 0;
+      transition: width .1s linear;
+    }
+
+    /* ============ 导航栏 ============ */
+    .nav-wrap {
       position: sticky;
       top: 0;
-      z-index: 100;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 14px 24px;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
+      z-index: 200;
+      background: rgba(7, 11, 24, .62);
+      -webkit-backdrop-filter: blur(18px) saturate(1.6);
+      backdrop-filter: blur(18px) saturate(1.6);
+      border-bottom: 1px solid var(--stroke);
+      transition: box-shadow .3s ease, background .3s ease;
     }
-    .nav a {
-      color: #333;
-      text-decoration: none;
-      padding: 4px 0;
+    .nav-wrap.scrolled {
+      background: rgba(7, 11, 24, .82);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .55), 0 1px 0 rgba(34, 211, 238, .18);
     }
-    .nav a:hover { color: #0066cc; }
 
-    /* ---------- 通用卡片 ---------- */
+    .nav {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: .5px;
+    }
+    .brand .badge {
+      width: 37px;
+      height: 37px;
+      border-radius: 12px;
+      background: var(--grad-btn);
+      color: #04101f;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 0 22px rgba(34, 211, 238, .45), inset 0 0 12px rgba(255, 255, 255, .35);
+    }
+    .brand small {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2.4px;
+      color: #6f80a3;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .nav-links a {
+      position: relative;
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      transition: color .25s, background .25s, border-color .25s, box-shadow .25s;
+    }
+    .nav-links a:hover {
+      color: #d8f7ff;
+      background: rgba(34, 211, 238, .10);
+      border-color: rgba(34, 211, 238, .28);
+    }
+    .nav-links a.active {
+      color: #04121e;
+      background: var(--grad-btn);
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(34, 211, 238, .45), 0 0 40px rgba(139, 92, 246, .28);
+    }
+
+    /* 汉堡按钮（移动端） */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      padding: 0 10px;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .05);
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+    }
+    .nav-toggle:hover { border-color: var(--stroke-neon); }
+    .nav-toggle span {
+      display: block;
+      height: 2px;
+      border-radius: 2px;
+      background: #a5f3fc;
+      box-shadow: 0 0 8px rgba(34, 211, 238, .8);
+      transition: transform .3s, opacity .3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 800px) {
+      .nav { padding: 10px 16px; }
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+        padding: 10px 16px 16px;
+        background: rgba(8, 12, 28, .96);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--stroke);
+        box-shadow: 0 22px 44px rgba(0, 0, 0, .6);
+        display: none;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a {
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 15px;
+      }
+    }
+
+    /* ============ 通用卡片（原有三个区块） ============ */
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background: #fff;
+      background: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .06);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
     }
 
     /* 让锚点跳转时不被固定导航挡住 */
     section {
-      padding: 24px 16px;
-      scroll-margin-top: 70px;
+      padding: 34px 16px;
+      scroll-margin-top: 92px;
     }
 
     h1 {
-      color: #1e88e5;
       text-align: center;
-      margin-bottom: 10px;
-    }
-    p {
-       color: #1e88e5;
-      text-align: center;
-      margin-bottom: 10px;
-      
-    }
-    img {
-      display: block;
-      width:fit-content;
-      
-      height: auto;
-      border-radius: 10px;
-      margin: 20px auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+      margin: 0 0 12px;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 22px rgba(139, 92, 246, .35));
     }
 
-    /* ---------- 按钮样式：只作用于这两个区块里的链接 ---------- */
+    #home p, #web p, #myhobby p {
+      color: var(--muted);
+      text-align: center;
+      margin: 0 0 12px;
+    }
+
+    #home img, #myhobby img {
+      display: block;
+      width: fit-content;
+      height: auto;
+      border-radius: 14px;
+      margin: 20px auto;
+      border: 1px solid var(--stroke);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .6), 0 0 34px rgba(34, 211, 238, .14);
+    }
+
+    /* ---------- 按钮：只作用于这两个区块里的链接 ---------- */
     #home a,
     #web a {
-      display:block;
-      width:max-content;
-      padding: 10px 20px;
-      margin: 4px 8px 4px 0;
-      background: #1e88e5;
-      color: #fff;
+      display: block;
+      width: max-content;
+      padding: 11px 22px;
+      margin: 6px 8px 6px 0;
+      background: var(--grad-btn);
+      color: #04121e;
+      font-weight: 700;
       text-decoration: none;
-      border-radius: 6px;
-      transition: background .3s;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(34, 211, 238, .28);
+      transition: transform .25s, box-shadow .25s, filter .25s;
     }
     #home a:hover,
-    #web a:hover { background: #1565c0; }
+    #web a:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 12px 34px rgba(139, 92, 246, .45);
+    }
 
     /* ---------- 爱好区：两栏 ---------- */
     #myhobby .container {
@@ -95,29 +294,488 @@
       gap: 20px;
       background: transparent;
       padding: 0;
+      border: 0;
       box-shadow: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
     }
     #myhobby .box {
       flex: 1 1 280px;
       padding: 20px;
-      background: #f0f0f0;
-      background-image:url("sisubackground.jpg");
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
-      border-radius: 12px;
-      
+      background-image:
+        linear-gradient(180deg, rgba(5, 8, 20, .80), rgba(5, 8, 20, .90)),
+        url("sisubackground.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .55);
+      transition: border-color .3s, box-shadow .3s, transform .3s;
     }
-    #myhobby .box h1 { margin-top: 0; }
+    #myhobby .box:hover {
+      transform: translateY(-3px);
+      border-color: var(--stroke-neon);
+      box-shadow: 0 22px 54px rgba(0, 0, 0, .6), 0 0 30px rgba(34, 211, 238, .18);
+    }
+    #myhobby .box h1 { margin-top: 0; font-size: 23px; }
+
+    /* ==================================================
+       家乡 · 厦门
+    ================================================== */
+    #xiamen {
+      padding: 54px 16px 64px;
+      background: transparent;
+    }
+    .xm-wrap { max-width: 1000px; margin: 0 auto; }
+
+    .xm-eyebrow {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin: 0 0 8px;
+      text-shadow: 0 0 18px rgba(34, 211, 238, .6);
+    }
+    .xm-title {
+      text-align: center;
+      font-size: 34px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      letter-spacing: 1px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 28px rgba(139, 92, 246, .4));
+    }
+    .xm-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14.5px;
+      margin: 0 auto 28px;
+      max-width: 660px;
+    }
+
+    /* 主视觉横幅 */
+    .xm-hero {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--stroke-neon);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, .65), 0 0 60px rgba(34, 211, 238, .16);
+      margin-bottom: 24px;
+    }
+    .xm-hero img {
+      display: block;
+      width: 100%;
+      height: clamp(230px, 38vw, 400px);
+      object-fit: cover;
+      filter: saturate(1.08) contrast(1.04);
+    }
+    .xm-hero .xm-hero-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 26px 30px;
+      background: linear-gradient(180deg, rgba(5, 7, 15, 0) 32%, rgba(5, 7, 15, .82) 100%);
+      color: #fff;
+    }
+    .xm-hero .xm-hero-text strong {
+      font-size: 25px;
+      letter-spacing: 3px;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, .8);
+    }
+    .xm-hero .xm-hero-text span {
+      font-size: 13.5px;
+      color: #c9d7f0;
+      margin-top: 4px;
+    }
+
+    /* 城市名片：数据卡 */
+    .xm-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .xm-stat {
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 17px 14px;
+      text-align: center;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      transition: border-color .3s, box-shadow .3s, transform .3s;
+    }
+    .xm-stat:hover {
+      transform: translateY(-3px);
+      border-color: var(--stroke-neon);
+      box-shadow: 0 0 26px rgba(34, 211, 238, .18);
+    }
+    .xm-stat b {
+      display: block;
+      font-size: 21px;
+      letter-spacing: .3px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .xm-stat span {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    @media (max-width: 640px) {
+      .xm-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* 介绍段落 */
+    .xm-intro {
+      background: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 26px 28px;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+      margin-bottom: 30px;
+      font-size: 15.5px;
+    }
+    .xm-intro p { margin: 0 0 12px; color: #c3d0e6; }
+    .xm-intro p:last-child { margin-bottom: 0; }
+    .xm-intro em {
+      font-style: normal;
+      color: #7dd3fc;
+      font-weight: 600;
+      text-shadow: 0 0 16px rgba(34, 211, 238, .35);
+    }
+
+    /* 小节标题 */
+    .xm-h2 {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin: 38px 0 18px;
+    }
+    .xm-h2 h3 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+    .xm-h2 span {
+      font-size: 11.5px;
+      letter-spacing: 3px;
+      color: var(--cyan);
+      font-weight: 700;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+    .xm-h2::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(34, 211, 238, .45), rgba(139, 92, 246, .25), transparent);
+    }
+
+    /* 历史时间线 */
+    .timeline {
+      list-style: none;
+      margin: 0 0 8px;
+      padding: 6px 0 6px 6px;
+      position: relative;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 13px; top: 10px; bottom: 10px;
+      width: 2px;
+      background: linear-gradient(180deg, #22d3ee, #8b5cf6 55%, #f472b6);
+      border-radius: 2px;
+      box-shadow: 0 0 16px rgba(139, 92, 246, .55);
+    }
+    .timeline li {
+      position: relative;
+      padding: 0 0 20px 36px;
+    }
+    .timeline li:last-child { padding-bottom: 0; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: 6px; top: 8px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #070b18;
+      border: 2px solid #22d3ee;
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, .12), 0 0 16px rgba(34, 211, 238, .6);
+    }
+    .timeline .t-year {
+      display: inline-block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #a5f3fc;
+      background: rgba(34, 211, 238, .10);
+      border: 1px solid rgba(34, 211, 238, .28);
+      border-radius: 999px;
+      padding: 2px 11px;
+      margin-bottom: 5px;
+    }
+    .timeline h4 { margin: 0 0 2px; font-size: 15.5px; color: #eaf2ff; }
+    .timeline p { margin: 0; font-size: 14px; color: var(--muted); }
+
+    /* ---------- 地标卡片（可点击） ---------- */
+    .xm-landmarks {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    @media (max-width: 640px) {
+      .xm-landmarks { grid-template-columns: 1fr; }
+    }
+
+    .xm-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .45);
+      transition: transform .35s cubic-bezier(.2, .7, .3, 1), box-shadow .35s, border-color .35s;
+    }
+    .xm-card:hover,
+    .xm-card:focus-visible {
+      transform: translateY(-6px);
+      border-color: var(--stroke-neon);
+      box-shadow: 0 26px 60px rgba(0, 0, 0, .6), 0 0 44px rgba(34, 211, 238, .22);
+      outline: none;
+    }
+    .xm-card:focus-visible {
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, .55), 0 26px 60px rgba(0, 0, 0, .6);
+    }
+
+    .xm-media {
+      position: relative;
+      overflow: hidden;
+    }
+    .xm-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      transition: transform .6s cubic-bezier(.2, .7, .3, 1), filter .4s;
+      filter: saturate(1.06);
+    }
+    .xm-card:hover img { transform: scale(1.07); filter: saturate(1.15) brightness(1.02); }
+
+    /* 图片悬浮遮罩 + 行动提示 */
+    .xm-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5, 7, 15, 0) 45%, rgba(5, 7, 15, .55) 100%);
+      opacity: .55;
+      transition: opacity .35s;
+      pointer-events: none;
+    }
+    .xm-card:hover .xm-media::after { opacity: .85; }
+
+    .xm-media-cta {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(.92);
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #04121e;
+      background: var(--grad-btn);
+      box-shadow: 0 0 30px rgba(34, 211, 238, .55);
+      opacity: 0;
+      white-space: nowrap;
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .xm-card:hover .xm-media-cta,
+    .xm-card:focus-visible .xm-media-cta {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    @media (hover: none) {
+      .xm-media-cta { opacity: 1; transform: translate(-50%, -50%) scale(.94); }
+    }
+
+    .xm-card-body { padding: 16px 18px 18px; }
+    .xm-card h4 {
+      margin: 0 0 6px;
+      font-size: 16.5px;
+      color: #eaf2ff;
+    }
+    .xm-card h4 small {
+      margin-left: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1px;
+    }
+    .xm-card p {
+      margin: 0 0 12px;
+      font-size: 13.8px;
+      color: var(--muted);
+    }
+    .xm-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #7dd3fc;
+      border: 1px solid rgba(34, 211, 238, .25);
+      border-radius: 999px;
+      padding: 3px 11px;
+      transition: background .25s, border-color .25s;
+    }
+    .xm-card:hover .xm-card-link {
+      background: rgba(34, 211, 238, .12);
+      border-color: rgba(34, 211, 238, .5);
+    }
+
+    /* 更多去处 / 标签 */
+    .xm-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 16px 0 6px;
+    }
+    .xm-chips span {
+      font-size: 13px;
+      color: #a5f3fc;
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      padding: 6px 14px;
+      transition: background .25s, transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .xm-chips span:hover {
+      background: rgba(34, 211, 238, .12);
+      border-color: rgba(34, 211, 238, .45);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(34, 211, 238, .2);
+    }
+
+    /* 美食 */
+    .xm-food {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 640px) {
+      .xm-food { grid-template-columns: 1fr; }
+    }
+    .xm-food .xm-card { cursor: default; }
+    .xm-food .xm-card img { aspect-ratio: 16 / 10; }
+    .xm-food .xm-card:hover { transform: none; }
+    .xm-food .xm-card:hover img { transform: scale(1.04); }
+
+    .xm-dishes {
+      background: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 22px 26px 22px 46px;
+      columns: 2;
+      column-gap: 30px;
+      margin: 0;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
+    }
+    @media (max-width: 640px) {
+      .xm-dishes { columns: 1; }
+    }
+    .xm-dishes li {
+      font-size: 14px;
+      color: #c3d0e6;
+      margin-bottom: 12px;
+      break-inside: avoid;
+    }
+    .xm-dishes b { color: #7dd3fc; }
+
+    /* 文化 */
+    .xm-culture {
+      background: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 24px 28px;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
+      font-size: 15px;
+      color: #c3d0e6;
+    }
+    .xm-culture p { margin: 0 0 14px; }
+    .xm-culture p:last-of-type { margin-bottom: 0; }
+    .xm-culture em {
+      font-style: normal;
+      color: #c4b5fd;
+      font-weight: 600;
+      text-shadow: 0 0 16px rgba(139, 92, 246, .4);
+    }
+
+    .xm-foot {
+      margin-top: 34px;
+      text-align: center;
+      font-size: 12px;
+      color: #6f80a3;
+      line-height: 1.9;
+    }
+    .xm-foot a { color: #7dd3fc; text-decoration: none; }
+    .xm-foot a:hover { text-decoration: underline; }
+
+    /* 滚动入场动画 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .xm-card img, .xm-card { transition: none; }
+    }
   </style>
 </head>
 <body>
 
-  <nav class="nav">
-    <a href="#home">home</a>
-    <a href="#web">useful website</a>
-    <a href="#myhobby">more about my hobby</a>
-  </nav>
+  <div id="progressBar"></div>
+
+  <header class="nav-wrap" id="navWrap">
+    <nav class="nav">
+      <a class="brand" href="#home">
+        <span class="badge">鹭</span>
+        <span>个人主页<small>MY PERSONAL PAGE</small></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#home" class="active">home</a>
+        <a href="#web">useful website</a>
+        <a href="#myhobby">more about my hobby</a>
+        <a href="#xiamen">my hometown · 厦门</a>
+      </div>
+    </nav>
+  </header>
 
   <section id="home">
     <div class="container">
@@ -150,6 +808,244 @@
       </div>
     </div>
   </section>
+
+  <section id="xiamen">
+    <div class="xm-wrap">
+
+      <p class="xm-eyebrow reveal">MY HOMETOWN</p>
+      <h2 class="xm-title reveal">我的家乡 · 厦门</h2>
+      <p class="xm-sub reveal">Amoy · 别称鹭岛 · 海上花园 —— 一座把海风、古早味和闽南烟火装进日常的城市。</p>
+
+      <div class="xm-hero reveal">
+        <img src="xm-hero.jpg" alt="从鼓浪屿远眺厦门本岛天际线">
+        <div class="xm-hero-text">
+          <strong>城在海上，海在城中</strong>
+          <span>从鼓浪屿隔鹭江远眺厦门本岛</span>
+        </div>
+      </div>
+
+      <div class="xm-stats reveal">
+        <div class="xm-stat"><b>1700.61 km²</b><span>陆地面积</span></div>
+        <div class="xm-stat"><b>536.5 万</b><span>常住人口（2025 年末）</span></div>
+        <div class="xm-stat"><b>约 21 ℃</b><span>年平均气温</span></div>
+        <div class="xm-stat"><b>1980 年</b><span>设立经济特区</span></div>
+      </div>
+
+      <div class="xm-intro reveal">
+        <p>我的家乡厦门，简称<em>“鹭”</em>，相传远古时是白鹭栖息之地，所以又叫<em>鹭岛</em>。它位于福建省东南沿海、台湾海峡西岸，与金门隔海相望，由厦门本岛、鼓浪屿等岛屿和沿海大陆组成，人们喜欢叫它<em>“海上花园”</em>。</p>
+        <p>这里属南亚热带海洋性季风气候，冬无严寒、夏无酷暑，凤凰木与三角梅开满街头；这里是 1980 年设立的<em>经济特区</em>，也是国家级闽南文化生态保护区——一座既有古早味、又有现代感的滨海城市。</p>
+      </div>
+
+      <div class="xm-h2"><h3>城的历史</h3><span>Timeline</span></div>
+      <ol class="timeline reveal">
+        <li>
+          <span class="t-year">西晋 · 282 年</span>
+          <h4>置同安县</h4>
+          <p>厦门一带最早纳入县级建制，此后渐渐形成渔耕聚落。</p>
+        </li>
+        <li>
+          <span class="t-year">明 · 1394 年</span>
+          <h4>筑成“厦门城”</h4>
+          <p>明洪武年间设中左所、筑厦门城，“厦门”之名自此载入史册，寓意“国家大厦之门”。</p>
+        </li>
+        <li>
+          <span class="t-year">清 · 1655 年</span>
+          <h4>郑成功改置“思明州”</h4>
+          <p>以厦门为基地练兵屯师，今天的思明区正由此得名。</p>
+        </li>
+        <li>
+          <span class="t-year">1842 年</span>
+          <h4>五口通商 · 厦门开埠</h4>
+          <p>《南京条约》后厦门开埠，华洋云集，侨乡文化由此兴盛。</p>
+        </li>
+        <li>
+          <span class="t-year">1935 年</span>
+          <h4>正式设市</h4>
+          <p>设立厦门市，成为福建最早的建制市之一。</p>
+        </li>
+        <li>
+          <span class="t-year">1980 年</span>
+          <h4>设立经济特区</h4>
+          <p>厦门成为中国改革开放的前沿窗口，此后升格计划单列市、副省级市。</p>
+        </li>
+        <li>
+          <span class="t-year">2017 年</span>
+          <h4>鼓浪屿列入《世界遗产名录》</h4>
+          <p>“鼓浪屿：历史国际社区”申遗成功，成为厦门最闪亮的世界级名片。</p>
+        </li>
+      </ol>
+
+      <div class="xm-h2"><h3>必去的地标</h3><span>Landmarks</span></div>
+      <div class="xm-landmarks">
+
+        <a class="xm-card reveal" href="https://www.glysyw.com/" target="_blank" rel="noopener noreferrer"
+           aria-label="鼓浪屿 —— 前往鼓浪屿世界文化遗产网查看详细介绍（新标签页打开）">
+          <div class="xm-media">
+            <img src="xm-gulangyu.jpg" alt="鼓浪屿的红砖小巷">
+            <span class="xm-media-cta">查看详细介绍 ↗</span>
+          </div>
+          <div class="xm-card-body">
+            <h4>鼓浪屿<small>世界文化遗产</small></h4>
+            <p>1.88 平方公里的小岛禁行机动车，九百多栋万国老建筑藏在红砖巷子里，钢琴声与海浪声此起彼伏，被称为“海上花园”与“钢琴之岛”。</p>
+            <span class="xm-card-link">glysyw.com · 鼓浪屿世界文化遗产网 ↗</span>
+          </div>
+        </a>
+
+        <a class="xm-card reveal" href="https://www.xmu.edu.cn/" target="_blank" rel="noopener noreferrer"
+           aria-label="厦门大学 —— 前往厦门大学官网查看详细介绍（新标签页打开）">
+          <div class="xm-media">
+            <img src="xm-xmu.jpg" alt="厦门大学全景">
+            <span class="xm-media-cta">查看详细介绍 ↗</span>
+          </div>
+          <div class="xm-card-body">
+            <h4>厦门大学<small>依山面海</small></h4>
+            <p>1921 年由陈嘉庚创办，嘉庚建筑“穿西装、戴斗笠”——红砖燕尾脊配西式廊柱，常被称作中国最美校园。</p>
+            <span class="xm-card-link">xmu.edu.cn · 厦门大学官网 ↗</span>
+          </div>
+        </a>
+
+        <a class="xm-card reveal" href="https://www.nanputuo.com/" target="_blank" rel="noopener noreferrer"
+           aria-label="南普陀寺 —— 前往南普陀寺官网查看详细介绍（新标签页打开）">
+          <div class="xm-media">
+            <img src="xm-nanputuo.jpg" alt="南普陀寺">
+            <span class="xm-media-cta">查看详细介绍 ↗</span>
+          </div>
+          <div class="xm-card-body">
+            <h4>南普陀寺<small>闽南名刹</small></h4>
+            <p>始建于唐代的千年古刹，背靠五老峰、与厦大一墙之隔，登峰可俯瞰校园与大海，素饼远近闻名。</p>
+            <span class="xm-card-link">nanputuo.com · 南普陀寺官网 ↗</span>
+          </div>
+        </a>
+
+        <a class="xm-card reveal" href="https://wlj.xm.gov.cn/" target="_blank" rel="noopener noreferrer"
+           aria-label="环岛路 —— 前往厦门市文化和旅游局查看详细介绍（新标签页打开）">
+          <div class="xm-media">
+            <img src="xm-huandao.jpg" alt="环岛路">
+            <span class="xm-media-cta">查看详细介绍 ↗</span>
+          </div>
+          <div class="xm-card-body">
+            <h4>环岛路<small>黄金海岸线</small></h4>
+            <p>40 多公里的滨海长廊，椰林、沙滩、碧海一路相伴，是骑行、看日出和听海风最好的地方。</p>
+            <span class="xm-card-link">wlj.xm.gov.cn · 厦门市文化和旅游局 ↗</span>
+          </div>
+        </a>
+
+      </div>
+      <div class="xm-chips reveal">
+        <span>集美学村 · 嘉庚建筑</span><span>沙坡尾艺术西区</span><span>八市老市场</span><span>曾厝垵</span><span>园林植物园</span><span>胡里山炮台</span><span>筼筜湖 · 白鹭</span><span>中山路骑楼</span>
+      </div>
+
+      <div class="xm-h2"><h3>古早味</h3><span>Taste of Amoy</span></div>
+      <div class="xm-food">
+        <div class="xm-card reveal">
+          <div class="xm-media">
+            <img src="xm-shacha.jpg" alt="沙茶面">
+          </div>
+          <div class="xm-card-body">
+            <h4>沙茶面<small>灵魂主食</small></h4>
+            <p>沙茶酱与高汤熬出的汤头浓郁微辣、回甘带花生香，加海蛎、大虾、醋肉是本地人的标配。</p>
+          </div>
+        </div>
+        <div class="xm-card reveal">
+          <div class="xm-media">
+            <img src="xm-oyster.jpg" alt="海蛎煎">
+          </div>
+          <div class="xm-card-body">
+            <h4>海蛎煎<small>闽南经典</small></h4>
+            <p>地瓜粉浆裹住新鲜小海蛎，煎到两面酥黄、外焦里嫩，蘸一点甜辣酱才算完整。</p>
+          </div>
+        </div>
+      </div>
+      <ul class="xm-dishes reveal">
+        <li><b>土笋冻</b>：滩涂星虫熬出的胶质冻，晶莹 Q 弹，蘸蒜蓉酱油，敢吃第一口就会爱上。</li>
+        <li><b>面线糊</b>：细面线熬糊，加油条和醋肉，是老厦门人最经典的元气早餐。</li>
+        <li><b>花生汤</b>：花生炖到入口即化，清甜暖胃，配油条最地道。</li>
+        <li><b>姜母鸭</b>：老姜与番鸭砂锅慢煨，姜香酒香渗进每一丝鸭肉。</li>
+        <li><b>同安封肉</b>：整块五花卤到软烂脱骨，闽南宴席上的硬菜。</li>
+        <li><b>烧肉粽 & 四果汤</b>：一咸一甜，是夏天最完美的收尾。</li>
+      </ul>
+
+      <div class="xm-h2"><h3>闽南底色</h3><span>Culture</span></div>
+      <div class="xm-culture reveal">
+        <p>厦门是闽南文化的核心城市：<em>南音</em>被称作“中国音乐活化石”，与海洋民俗<em>“送王船”</em>同列人类非物质文化遗产代表作名录；歌仔戏、高甲戏、答嘴鼓至今活跃在街头巷尾。</p>
+        <p>每逢中秋，家家户户围坐掷骰<em>“博饼”</em>——相传由郑成功所创的习俗，让厦门人过着“小春节、大中秋”的独特节日；一泡功夫茶下肚，才是厦门最地道的打开方式。</p>
+      </div>
+
+      <p class="xm-foot">
+        数据截至 2025 年末，来源：厦门市国民经济和社会发展统计公报 · 厦门市人民政府门户网站<br>
+        本栏目照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a>（CC BY-SA 等开放授权），摄影：JULIANISME / Shoestring / Ratvirgin / Slyronit / Windmemories / Chensiyuan
+      </p>
+
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var navWrap = document.getElementById('navWrap');
+      var toggle = document.getElementById('navToggle');
+      var menu = document.getElementById('navLinks');
+      var bar = document.getElementById('progressBar');
+      var links = Array.prototype.slice.call(menu.querySelectorAll('a'));
+      var sections = ['home', 'web', 'myhobby', 'xiamen'].map(function (id) {
+        return document.getElementById(id);
+      });
+
+      /* 移动端菜单开合 */
+      toggle.addEventListener('click', function () {
+        var open = menu.classList.toggle('open');
+        toggle.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      links.forEach(function (a) {
+        a.addEventListener('click', function () {
+          menu.classList.remove('open');
+          toggle.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+      document.addEventListener('click', function (e) {
+        if (!navWrap.contains(e.target)) {
+          menu.classList.remove('open');
+          toggle.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      /* 滚动进度 + 阴影 */
+      function onScroll() {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+        navWrap.classList.toggle('scrolled', h.scrollTop > 8);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      /* 滚动侦测：高亮当前栏目 */
+      function setActive(id) {
+        links.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) setActive(en.target.id);
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+      sections.forEach(function (s) { spy.observe(s); });
+
+      /* 入场动画 */
+      var reveal = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.classList.add('in');
+            reveal.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(function (el) { reveal.observe(el); });
+    })();
+  </script>
 
 </body>
 </html>
